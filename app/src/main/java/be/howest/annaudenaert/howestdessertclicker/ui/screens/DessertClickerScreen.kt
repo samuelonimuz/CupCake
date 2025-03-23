@@ -16,6 +16,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -25,6 +30,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import be.howest.annaudenaert.howestdessertclicker.R
+import be.howest.annaudenaert.howestdessertclicker.data.DessertsRepository
+
+@Composable
+fun DessertClickerApp() {
+    var dessertsSold by remember { mutableIntStateOf(0) }
+    val currentDessert = DessertsRepository.desserts.first { it.startProductionAmount <= dessertsSold }
+    val revenue = dessertsSold * currentDessert.price
+
+    DessertClickerScreen(
+        revenue = revenue,
+        dessertsSold = dessertsSold,
+        dessertImageId = currentDessert.imageId,
+        onDessertClicked = {
+            dessertsSold++
+        },
+    )
+}
 
 @Composable
 fun DessertClickerScreen(
